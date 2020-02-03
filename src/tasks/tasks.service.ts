@@ -12,20 +12,32 @@ export class TasksService {
     }
 
     getTaskById(id: string): Task {
-        return this.tasks.find(task => task.id === id);
+        return this.tasks.find((task) => task.id === id);
     }
 
     createTask(createTaskDto: CreateTaskDto): Task {
-        const {title, description} = createTaskDto; 
+        // const {title, description} = createTaskDto; // * beautiful way
+
         const task: Task = {
             id: uuid(),
-            title: title,
-            description: description,
+            title: createTaskDto.title,
+            description: createTaskDto.description,
             status: TaskStatus.OPEN
         }
 
         this.tasks.push(task);
 
         return task;
+    }
+
+    updateTaskStatus(id: string, status: TaskStatus): Task {
+        const task = this.getTaskById(id);
+        task.status = status;
+
+        return task;
+    }
+
+    deleteTask(id: string): void {
+        this.tasks = this.tasks.filter((task) => task.id !== id);
     }
 }
